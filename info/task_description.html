@@ -1,0 +1,100 @@
+<!-- Describe task in general -->
+<p>
+    This mission is an adaptation of the "Undead" game (from
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/">
+    Simon Tatham's Portable Puzzle Collection</a>).
+    If you are lost or just want to play, the game is available
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/undead.html">here</a>.
+</p>
+
+<p>
+    There is a <a href="https://en.wikipedia.org/wiki/House_of_mirrors">house of mirrors</a> filled with monsters (ghosts, vampires and zombies). Inside, the mirrors are installed to show what's on the right, or on the left (so you can't see yourself in them).
+    As you probably know, we can't see ghosts except via a mirror, or vampires via any mirror. Mirror or not, zombies are visibles.
+</p>
+
+<p>
+    You will have to fill the plan of the house with these monsters. For that, we give you the plan, the number of ghosts/vampires/zombies and the number of monsters that can be seen from outside.
+</p>
+
+<p>
+    The rectangular house will be represented by a tuple of strings.
+    Empty places by '.', mirrors by '\\' and '/',
+    ghosts by 'G', vampires by 'V', zombies by 'Z'.
+    Elements are separated by spaces (input and output).
+</p>
+
+
+<!-- Explain input and output values -->
+<p>
+    <strong>Input:</strong>
+    A tuple of strings, a dict (keys: 'ghost', 'vampire', 'zombie' ; values: integers) and a dict (keys: 'N', 'S', 'W', 'E' ; values: lists of integers).
+</p>
+
+<p>
+    <strong>Output:</strong>
+    An tuple/list/iterable of strings.
+</p>
+
+
+<!-- Put some usage examples -->
+<div class="for_info_only">
+<p>
+    <strong>Example:</strong>
+</p>
+
+<pre style="text-align:center">
+<img src="{{MEDIA}}undead-example.png" alt="4x4 example image"/>
+2 ghosts, 2 vampires, 4 zombies
+  3 0 3 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+4 . \ . / 0                  Z \ V /
+0 \ . . . 3       ===\       \ Z G V
+0 / \ . \ 0       ===/       / \ Z \
+0 . \ / . 1                  G \ / Z
+  2 1 1 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+For example, looking first row from west, you see monsters at
+(0, 0), (1, 1), (2, 2) and (3, 3). The first directly, the others via mirror(s).
+</pre>
+
+<pre class="brush: python">
+checkio(('. \\ . /',
+         '\\ . . .',
+         '/ \\ . \\',
+         '. \\ / .'),
+        {'ghost': 2,
+         'vampire': 2,
+         'zombie': 4},
+        {'N': [3, 0, 3, 0],
+         'S': [2, 1, 1, 4],
+         'W': [4, 0, 0, 0],
+         'E': [0, 3, 0, 1]}) == ('Z \\ V /',
+                                 '\\ Z G V',
+                                 '/ \\ Z \\',
+                                 'G \\ / Z')
+</pre>
+
+<p>
+    To play the puzzles / tests yourself:
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/undead.html#4x4:2,2,4,aLaRLcRLaLaLRa,3,0,3,0,0,3,0,1,4,1,1,2,0,0,0,4" title="4 rows, 4 columns">1</a>
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/undead.html#4x6:3,5,4,LeLRRLaLRaLLdRRaR,2,1,2,0,1,0,0,3,4,0,0,3,3,0,2,4,0,0,3,0" title="6 rows, 4 columns">2</a>
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/undead.html#7x5:6,10,9,cRbRbLRkLcRLaRaLbL,3,5,0,3,3,7,1,0,4,6,0,1,3,0,3,0,5,0,3,2,0,6,4,2" title="5 rows, 7 columns">3</a>
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/undead.html#4x4:3,5,2,dRLLLdRbR,0,2,3,1,3,1,3,0,0,2,0,2,2,3,1,3" title="4 rows, 4 columns">4</a>
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/undead.html#4x5:7,3,4,aRfRdRaRLbR,1,0,4,2,3,0,3,4,0,0,4,4,0,0,5,1,0,1" title="5 rows, 4 columns">5</a>
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/undead.html#4x7:2,9,5,aRaLRaRaLaLRbLReRcRaR,1,0,1,0,0,5,1,0,4,2,0,0,4,0,3,2,5,4,2,3,0,1" title="7 rows, 4 columns">6</a>
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/undead.html#5x5:6,5,6,aRbLLdLRcLaRcLc,4,1,0,5,0,0,3,5,3,4,6,5,0,0,1,1,0,3,5,1" title="5 rows, 5 columns">7</a>
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/undead.html#5x6:11,8,3,dRRaLeLLcRLgRb,1,4,2,0,3,0,2,0,2,1,0,3,1,2,4,5,8,1,3,5,0,2" title="6 rows, 5 columns">8</a>
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/undead.html#6x6:4,7,15,aLaLdLeRaRLbRaRkLL,5,5,4,1,4,2,2,4,2,1,4,4,1,4,5,4,4,5,4,4,3,4,0,5" title="6 rows, 6 columns">9</a>
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/undead.html#7x6:9,10,6,aLaRaLLaLjLLRaRLLcRRRdLLRc,3,0,5,0,2,0,0,0,2,0,4,0,3,8,4,7,3,3,1,2,1,0,0,7,2,4" title="6 rows, 7 columns">10</a>
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/undead.html#7x7:5,13,6,aLcLbLRRaRbLaLRLaLRRLLaLLaRLaLbLcLcLaRLa,3,0,2,2,2,0,3,1,2,2,2,4,1,0,3,0,0,2,2,1,1,0,2,2,1,3,3,0" title="7 rows, 7 columns">11</a>
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/undead.html#7x7:7,12,10,bLbReLaRbLLRRcLLRaRRLcLLLdLcLcL,4,6,0,6,1,0,1,4,4,1,0,0,7,1,3,5,1,4,1,3,1,1,0,4,4,3,4,3" title="7 rows, 7 columns">12</a>
+    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/undead.html#7x7:13,16,2,jLaLReRLdRLLaLLaLRaLcLRLaLdR,4,0,4,4,4,0,2,4,0,0,0,1,0,0,0,1,5,5,6,1,0,0,1,1,5,4,3,4" title="7 rows, 7 columns">13</a>
+</p>
+</div>
+
+<p>
+    <strong>Preconditions:</strong>
+    <ul>
+        <li>All puzzles have an unique solution.</li>
+        <li>4 &le; len(grid) &le; 7 and 4 &le; len(grid[0]) &le; 7.</li>
+        <li>all(len(row) == len(grid[0]) for row in grid).</li>
+    </ul>
+</p>
