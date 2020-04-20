@@ -8,12 +8,17 @@
 </p>
 
 <p>
-    There is a <a href="https://en.wikipedia.org/wiki/House_of_mirrors">house of mirrors</a> filled with monsters (ghosts, vampires and zombies). Inside, the mirrors are installed to show what's on the right, or on the left (so you can't see yourself in them).
-    As you probably know, we can't see ghosts except via a mirror, or vampires via any mirror. Mirror or not, zombies are visibles.
+    There is a <a href="https://en.wikipedia.org/wiki/House_of_mirrors">house of mirrors</a>
+    filled with monsters (ghosts, vampires and zombies). Inside, the mirrors are installed to
+    show what's on the right, or on the left (so you can't see yourself in them).
+    As you probably know, we can't see ghosts except via a mirror, or vampires via any mirror.
+    Mirror or not, zombies are visibles.
 </p>
 
 <p>
-    You will have to fill the plan of the house with these monsters. For that, we give you the plan, the number of ghosts/vampires/zombies and the number of monsters that can be seen from outside.
+    You will have to fill the plan of the house with these monsters.
+    For that, we give you the plan, the number of ghosts/vampires/zombies
+    and the number of monsters that can be seen from outside.
 </p>
 
 <p>
@@ -27,7 +32,9 @@
 <!-- Explain input and output values -->
 <p>
     <strong>Input:</strong>
-    A tuple of strings, a dict (keys: 'ghost', 'vampire', 'zombie' ; values: integers) and a dict (keys: 'N', 'S', 'W', 'E' ; values: lists of integers).
+    A tuple of strings,
+    a dictionary (keys: 'ghost', 'vampire', 'zombie' ; values: integers)
+    and a dictionary (keys: 'N', 'S', 'W', 'E' ; values: lists of integers).
 </p>
 
 <p>
@@ -44,15 +51,15 @@
 
 <pre style="text-align:center">
 <img src="{{MEDIA}}undead-example.png" alt="4x4 example image"/>
+
 2 ghosts, 2 vampires, 4 zombies
-  3 0 3 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-4 . \ . / 0                  Z \ V /
-0 \ . . . 3       ===\       \ Z G V
-0 / \ . \ 0       ===/       / \ Z \
-0 . \ / . 1                  G \ / Z
-  2 1 1 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-For example, looking first row from west, you see monsters at
-(0, 0), (1, 1), (2, 2) and (3, 3). The first directly, the others via mirror(s).
+('. \ . /',                 ('Z \ V /',
+ '\ . . .',       ===\       '\ Z G V',
+ '/ \ . \',       ===/       '/ \ Z \',
+ '. \ / .')                  'G \ / Z')
+For example, looking column 2 from north, you see monsters at (0, 2), (1, 2),
+(2, 2) and (3, 0). The first three directly, the last one through mirrors.
+Looking column 2 from north in the solution, you see them all but the ghost at (1, 2).
 </pre>
 
 <pre class="brush: python">
