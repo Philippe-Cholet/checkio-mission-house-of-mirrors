@@ -63,8 +63,8 @@ if __name__ == '__main__':
     )
 
     for test_nb, (house_plan, monsters, counts, answer) in enumerate(TESTS, 1):
-        result = undead(house_plan, monsters, counts)
-        if tuple(result) != answer:
+        result = tuple(undead(house_plan, monsters, counts))
+        if result != answer:
             print(f'You failed the test #{test_nb}:',
                   *house_plan, monsters, counts,
                   'Your result:', *result,
