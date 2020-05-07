@@ -16,39 +16,36 @@ requirejs(['ext_editor_io', 'jquery_190', 'raphael_210'],
              *----------------------------------------------*/
             const attr = {
                 grid: {
-                    'stroke-width': '1px',
-                },
-                mirror: {
-                    'stroke-width': '5px',
-                },
-                initial: {
-                    'fill': 'white',
-                    'font-size': '16px',
+                    'stroke-width': '0.2px',
                 },
                 number: {
                     'color': 'black',
                     'font-size': '16px',
                     'font-weight': 'bold',
                 },
-                vampire: {
-                    'fill': '#FABA00',
+                name: {
                     'stroke-width': '0px',
                     'font-size': '10px',
                     'letter-spacing': 'normal',
+                },
+                total: {
+                    'fill': 'white',
+                    'font-size': '16px',
+                },
+                vampire: {
+                    'fill': '#FABA00',
+                    'stroke': '#FABA00',
+                    'stroke-width': '0px',
                 },
                 zombie: {
                     'fill': '#294270',
+                    'stroke': '#294270',
                     'stroke-width': '0px',
-                    'font-size': '10px',
-                    'letter-spacing': 'normal',
                 },
                 ghost: {
                     'fill': '#61B0E5',
-                    'stroke-linejoin': 'round',
                     'stroke': '#61B0E5',
-                    'font-size': '10px',
                     'stroke-width': '0px',
-                    'letter-spacing': 'normal',
                 },
             }
 
@@ -95,14 +92,14 @@ requirejs(['ext_editor_io', 'jquery_190', 'raphael_210'],
             const paper = Raphael(tgt_node, unit*width+os*2, top_os+unit*height+os*2, 0, 0)
 
             /*----------------------------------------------*
-             * step: #1
-             * validate
+             * # 1
+             * validate output
              *
              *----------------------------------------------*/
             const [valid, error_msg] = validate_output(height, width)
 
             /*----------------------------------------------*
-             * step: #2
+             * # 2
              * check numbers
              *
              *----------------------------------------------*/
@@ -137,90 +134,82 @@ requirejs(['ext_editor_io', 'jquery_190', 'raphael_210'],
             }
 
             /*----------------------------------------------*
-             * step: #3
+             * # 3
              * draw top monsters
              *
              *----------------------------------------------*/
+            function draw_top_monsters(x, monster_name, func) {
+                const initial = monster_name[0].toUpperCase()
+                paper.text(x, 6, initial+monster_name.slice(1)).attr(attr[monster_name]).attr(attr.name)
+                func(x, 30, 30)
+                paper.text(x, 30, monsters[monster_name]).attr(attr.total).attr(
+                    {'fill': ! valid || monster_total[initial] ? 'white' : 'red'})
+            }
+
             const center = os+unit*(width / 2)
             const [left, right] = [center-41, center+41]
-            const v_monster = 30
-            const v_name = 6
 
-            ghost(left, v_monster, 30)
-            vampire(center, v_monster, 30)
-            zombie(right, v_monster, 30)
-
-            paper.text(left, v_monster, monsters.ghost).attr(attr.initial).attr(
-                {'fill': ! valid || monster_total.G ? 'white' : 'red'})
-            paper.text(center, v_monster, monsters.vampire).attr(attr.initial).attr(
-                {'fill': ! valid || monster_total.V ? 'white' : 'red'})
-            paper.text(right, v_monster, monsters.zombie).attr(attr.initial).attr(
-                {'fill': ! valid || monster_total.Z ? 'white' : 'red'})
-
-            paper.text(left, v_name, 'Ghost').attr(attr.ghost)
-            paper.text(center, v_name, 'Vampire').attr(attr.vampire)
-            paper.text(right, v_name, 'Zombie').attr(attr.zombie)
+            draw_top_monsters(left, 'ghost', ghost)
+            draw_top_monsters(center, 'vampire', vampire)
+            draw_top_monsters(right, 'zombie', zombie)
 
             /*----------------------------------------------*
-             * step: #4
-             * draw grid, count
+             * # 4
+             * draw grid, counter
              *
              *----------------------------------------------*/
-            const font_size_count = {'font-size': Math.max(14 , 8*(8/Math.max(height, width)))}
+            const font_size = {'font-size': Math.max(14 , 8*(8/Math.max(height, width)))}
 
             // horizontal
             for (let i = 0; i < height; i += 1) {
                 paper.rect(os, top_os+i*unit+os, unit*width, unit).attr(attr.grid)
-                paper.text(os/2, top_os+(i+0.5)*unit+os, counts.W[i]).attr(attr.number).attr(
-                    font_size_count).attr({'fill': ! valid || count_result.W[i] ? 'black' : 'red'})
-                paper.text(os+unit*width+os/2, top_os+(i+0.5)*unit+os, counts.E[i]).attr(attr.number).attr(
-                    font_size_count).attr({'fill': ! valid || count_result.E[i] ? 'black' : 'red'})
+                const ary = [['W', 0], ['E', os+unit*width]]
+                ary.forEach(([dr, dx])=>{
+                    paper.text(os/2+dx, top_os+(i+0.5)*unit+os, counts[dr][i]).attr(attr.number).attr(
+                        font_size).attr({'fill': ! valid || count_result[dr][i] ? 'black' : 'red'})
+                })
             }
 
             // vertical
             for (let i = 0; i < width; i += 1) {
                 paper.rect(i*unit+os, top_os+os, unit, unit*height).attr(attr.grid)
-                paper.text((i+0.5)*unit+os, top_os+os/2, counts.N[i]).attr(attr.number).attr(
-                    font_size_count).attr({'fill': ! valid || count_result.N[i] ? 'black' : 'red'})
-                paper.text((i+0.5)*unit+os, top_os+os+unit*height+os/2, counts.S[i]).attr(attr.number).attr(
-                    font_size_count).attr({'fill': ! valid || count_result.S[i] ? 'black' : 'red'})
+                const ary = [['N', 0], ['S', os+unit*height]]
+                ary.forEach(([dr, dy])=>{
+                    paper.text((i+0.5)*unit+os, top_os+os/2+dy, counts[dr][i]).attr(attr.number).attr(
+                        font_size).attr({'fill': ! valid || count_result[dr][i] ? 'black' : 'red'})
+                })
             }
 
             /*----------------------------------------------*
-             * step: #5
+             * # 5
              * draw monsters, mirrors
              *
              *----------------------------------------------*/
-            const font_size_monster = {'font-size': 8*(8/Math.max(height, width))}
             const scale = 4 / Math.max(height, width)
+            const funcs = {V: [vampire, 40], Z: [zombie, 30], G: [ghost, 29]}
             for (let y = 0; y < height; y += 1) {
                 for (let x = 0; x < width; x += 1) {
                     if (valid) {
                         const cell = output_splitted[y][x]
                         if (MONSTER.includes(cell)) {
-                            if (cell == 'V') {
-                                vampire(os+unit*(x+0.5), top_os+os+unit*(y+0.5), 40*scale)
-                            } else if (cell == 'Z') {
-                                zombie(os+unit*(x+0.5), top_os+os+unit*(y+0.5), 30*scale)
-                            } else if (cell == 'G') {
-                                ghost(os+unit*(x+0.5), top_os+os+unit*(y+0.5), 29*scale)
-                            }
+                            funcs[cell][0](os+unit*(x+0.5), top_os+os+unit*(y+0.5), funcs[cell][1]*scale)
                         }
                     }
 
                     const grid_cell = grid_splitted[y][x]
-                    if (grid_cell == '/') {
-                        paper.path(['M', os+unit*(x+1-0.2), top_os+os+unit*(y+0.2), 'l', -unit*0.6, unit*0.6]).attr(
-                            {'stroke-width': 5*scale})
-                    } else if (grid_cell == '\\') {
-                        paper.path(['M', os+unit*(x+0.2), top_os+os+unit*(y+0.2), 'l', unit*0.6, unit*0.6]).attr(
+                    if (['/', '\\'].includes(grid_cell)) {
+                        let [x1, x2] = [os+unit*(x+0.8), os+unit*(x+0.2)]
+                        if (grid_cell == '\\') {
+                            [x1, x2] = [x2, x1]
+                        }
+                        paper.path(['M', x1, top_os+os+unit*(y+0.2), 'L', x2, top_os+os+unit*(y+0.8)]).attr(
                             {'stroke-width': 5*scale})
                     }
                 }
             }
 
             /*----------------------------------------------*
-             * step: #6
+             * # 6
              * message
              *
              *----------------------------------------------*/
@@ -232,14 +221,52 @@ requirejs(['ext_editor_io', 'jquery_190', 'raphael_210'],
 
             /*----------------------------------------------*
              *
-             * count visible monsters (function)
+             * validate output
+             *
+             *----------------------------------------------*/
+            function validate_output() {
+                const is_array = Array.isArray(output)
+                if (! is_array || output.length !== height) {
+                    return [false, "Wrong output format."]
+                }
+
+                for (let y = 0; y < height; y += 1) {
+                    const row = output[y]
+                    const type = typeof row
+                    if (type !== 'string') {
+                        return [false, "Wrong output format."]
+                    }
+                    const [items, grid_items] = [row.split(' '), grid[y].split(' ')]
+                    if (row.length !== grid[y].length || items.length !== width) {
+                        return [false, "Wrong output format."]
+                    }
+
+                    for (let x = 0; x < items.length; x += 1) {
+                        const [cell, grid_cell] = [items[x], grid_items[x]]
+                        if (grid_cell === '.') {
+                            if (! MONSTER.includes(cell)) {
+                                return [false, `Invalid monster (${y}, ${x}) : ${cell}`]
+                            }
+                        } else {
+                            if (grid_cell !== cell) {
+                                return [false, `Invalid mirror (${y}, ${x}) : ${cell}`]
+                            }
+                        }
+                    }
+                }
+                return [true, 'good']
+            }
+
+            /*----------------------------------------------*
+             *
+             * count visible monsters
              *
              *----------------------------------------------*/
             function count_visible_monsters(sy, sx, sdr, num) {
                 let [y, x, dr] = [sy, sx, sdr]
                 let mirrored = false
                 let counter = 0
-                while (y >= 0 && y < output_splitted.length && x >= 0 && x < output_splitted[0].length) {
+                while (y >= 0 && y < height && x >= 0 && x < width) {
                     const cell = output_splitted[y][x]
                     if (MONSTER.includes(cell)) {
                         counter += mirrored ? cell != 'V' : cell != 'G'
@@ -256,70 +283,17 @@ requirejs(['ext_editor_io', 'jquery_190', 'raphael_210'],
 
             /*----------------------------------------------*
              *
-             * validate output (function)
-             *
-             *----------------------------------------------*/
-            function validate_output() {
-                const is_array = Array.isArray(output)
-                if (! is_array) {
-                    return [false, "Wrong output format."]
-                }
-
-                if (output.length !== height) {
-                    return [false, "Wrong output format."]
-                }
-
-                for (let y = 0; y < output.length; y += 1) {
-                    const row = output[y]
-                    const type = typeof row
-
-                    if (type !== 'string') {
-                        return [false, "Wrong output format."]
-                    }
-
-                    if (row.length !== grid[y].length) {
-                        return [false, "Wrong output format."]
-                    }
-
-                    const [items, grid_items] = [row.split(' '), grid[y].split(' ')]
-                    if (items.length !== grid_items.length) {
-                        return [false, "Wrong output format."]
-                    }
-
-                    for (let x = 0; x < items.length; x += 1) {
-                        const [cell, grid_cell] = [items[x], grid_items[x]]
-                        if (grid_cell === '.') {
-                            if (! ['V', 'Z', 'G'].includes(cell)) {
-                                return [false, `Invalid monster (${y}, ${x}) : ${cell}`]
-                            }
-                        } else {
-                            if (grid_cell !== cell) {
-                                return [false, `Invalid mirror (${y}, ${x}) : ${cell}`]
-                            }
-                        }
-                    }
-                }
-                return [true, 'good']
-            }
-
-            /*----------------------------------------------*
-             *
              * vampire
              *
              *----------------------------------------------*/
             function vampire(x, y, px) {
                 const v = paper.set()
                 const z = px / 75
-                v.push(paper.path(
-                    ['M', x, y,
-                    'm', -10*z, -37.5*z,
-                    'l', -10*z, 25*z,
-                    'l', 10*z, 50*z,
-                    'l', 20*z, 0*z,
-                    'l', 10*z, -50*z,
-                    'l', -10*z, -25*z,
-                    'z'
-                    ]))
+                v.push(paper.path([
+                    'M', x, y, 'm', -10*z, -37.5*z,
+                    'l', -10*z, 25*z, 'l', 10*z, 50*z, 'l', 20*z, 0*z,
+                    'l', 10*z, -50*z, 'l', -10*z, -25*z, 'z'
+                ]))
                 return v.attr(attr.vampire)
             }
 
@@ -352,7 +326,7 @@ requirejs(['ext_editor_io', 'jquery_190', 'raphael_210'],
                 g.push(paper.path(['M', x+50*z, y+27.5*z, 'l', 0, 30*z, 'l', -30*z, -30*z, 'z']))
                 g.push(paper.path(['M', x-45*z, y+27.5*z, 'l', 30*z, 30*z, 'l', 30*z, -30*z, 'z']))
                 g.push(paper.path(['M', x-15*z, y+27.5*z, 'l', 30*z, 30*z, 'l', 30*z, -30*z, 'z']))
-                g.attr(attr.ghost).attr({'stroke-width': (z*10)+'px'})
+                g.attr(attr.ghost).attr({'stroke-width': (z*10)+'px', 'stroke-linejoin': 'round'})
                 return g
             }
         }
