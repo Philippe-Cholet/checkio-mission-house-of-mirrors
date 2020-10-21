@@ -9,15 +9,20 @@
 
 <p>
     There is a <a href="https://en.wikipedia.org/wiki/House_of_mirrors">house of mirrors</a>
-    filled with monsters (ghosts, vampires and zombies). Inside, the mirrors are installed to
-    show what's on the right, or on the left (so you can't see yourself in them).
-    As you probably know, we can't see ghosts except via a mirror, or vampires via any mirror.
-    Mirror or not, zombies are visibles.
+    filled with monsters (ghosts, vampires and zombies). Inside, the mirrors are arranged to
+    show what's on the right or left (so you can't see yourself).
+    <br>
+    As you probably know,
+    <ul>
+        <li>ghosts are not visible except through a mirror,</li>
+        <li>vampires have no reflection,</li>
+        <li>zombies are always visible.</li>
+    </ul>
 </p>
 
 <p>
-    You will have to fill the plan of the house with these monsters.
-    For that, we give you the plan, the number of ghosts/vampires/zombies
+    You will have to fill in the plan of the house with these monsters.
+    For this, we give you the plan, the number of ghosts/vampires/zombies
     and the number of monsters that can be seen from outside.
 </p>
 
@@ -34,7 +39,9 @@
     <strong>Input:</strong>
     A tuple of strings,
     a dictionary (keys: 'ghost', 'vampire', 'zombie' ; values: integers)
-    and a dictionary (keys: 'N', 'S', 'W', 'E' ; values: lists of integers).
+    and a dictionary (keys:
+    'N', 'S', 'W', 'E' which stand for North, South, West, East ;
+    values: lists of integers).
 </p>
 
 <p>
@@ -57,9 +64,12 @@
  '\ . . .',       ===\       '\ Z G V',
  '/ \ . \',       ===/       '/ \ Z \',
  '. \ / .')                  'G \ / Z')
+
 For example, looking column 2 from north, you see monsters at (0, 2), (1, 2),
 (2, 2) and (3, 0). The first three directly, the last one through mirrors.
-Looking column 2 from north in the solution, you see them all but the ghost at (1, 2).
+
+Looking column 2 from north in the solution, you see them all
+except the ghost at (1, 2), so three monsters as expected.
 </pre>
 
 <pre class="brush: python">
