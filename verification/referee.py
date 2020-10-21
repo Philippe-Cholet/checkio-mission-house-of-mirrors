@@ -33,7 +33,7 @@ from tests import TESTS
 cover = '''
 def cover(func, data):
     grid, monsters, numbers = data
-    return func(tuple(grid), monsters, numbers)
+    return list(func(tuple(grid), monsters, numbers))
 '''
 
 api.add_listener(

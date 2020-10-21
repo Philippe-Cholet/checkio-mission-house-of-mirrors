@@ -164,7 +164,7 @@ def groups2test(groups):
     for line in lines:
         counts['E'].append(line.pop())
         counts['W'].append(line.pop(0))
-    answer = tuple(map(' '.join, lines))
+    answer = list(map(' '.join, lines))
     house = tuple(line.translate(table) for line in answer)
     counts = {k: list(map(int, v)) for k, v in counts.items()}
     return {'input': (house, monsters, counts), 'answer': answer}
